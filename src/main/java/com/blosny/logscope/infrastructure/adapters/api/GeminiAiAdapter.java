@@ -27,7 +27,7 @@ public class GeminiAiAdapter implements AiAnalysisService {
     @Override
     @SuppressWarnings("unchecked")
     public String analyzeError(String message, String stackTrace) {
-        // Loglarda ne olup bittiğini görelim
+
         System.out.println("DEBUG: AI Analizi başlatılıyor...");
 
         String prompt = """
@@ -46,7 +46,6 @@ public class GeminiAiAdapter implements AiAnalysisService {
                             Map.of("parts", List.of(
                                     Map.of("text", prompt)))));
 
-            // GÜNCELLEME: Tekrar v1beta'ya döndük ve modeli 1.5-flash yaptık
             Map<String, Object> response = restClient.post()
                     .uri(uriBuilder -> uriBuilder
                             .path("/v1beta/models/gemini-2.5-flash:generateContent")
@@ -70,7 +69,7 @@ public class GeminiAiAdapter implements AiAnalysisService {
             return "AI cevabı beklenen formatta gelmedi.";
 
         } catch (Exception e) {
-            // Eğer kota hatası (429) alırsak en azından bunu bilelim
+
             if (e.getMessage().contains("429")) {
                 return "AI şu an çok meşgul (Kota hatası). Lütfen 30 saniye sonra tekrar dene.";
             }

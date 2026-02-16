@@ -1,6 +1,5 @@
 package com.blosny.logscope.infrastructure.adapters.web;
 
-
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +14,12 @@ import com.blosny.logscope.domain.model.ErrorLog;
 
 import lombok.RequiredArgsConstructor;
 
-
-@RestController // Spring'e "Bu bir API kapısıdır" diyoruz
-@RequestMapping("api/errors") // Bu kapıya ulaşak için adres: localhost:8080/api/errors
-@RequiredArgsConstructor // Repository'i içeriye otomatik "enjekte" eder
+@RestController
+@RequestMapping("api/errors")
+@RequiredArgsConstructor
 public class ErrorLogController {
 
-    private final LogScopeService service; // Artık Repository ile değil, Service ile konuşuyoruz.
+    private final LogScopeService service;
 
     @PostMapping
     public ErrorLog createErrorLog(@RequestBody ErrorLogRequest request) {
@@ -31,5 +29,5 @@ public class ErrorLogController {
     @GetMapping
     public List<ErrorLog> getAllErrors() {
         return service.getAllLogs();
-    }  
+    }
 }
