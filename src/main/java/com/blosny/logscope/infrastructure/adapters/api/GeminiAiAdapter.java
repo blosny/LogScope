@@ -31,28 +31,27 @@ public class GeminiAiAdapter implements AiAnalysisService {
         System.out.println("DEBUG: AI Analizi başlatılıyor...");
 
         String prompt = """
-                Aşağıdaki yazılım hatasını bir bilgisayar mühendisi gibi analiz et.
-                Kısa ve öz bir açıklama yap ve çözüm yolu öner.
-                
+                Aşağıdaki yazılım hatasını analiz et.
+                Çok kısa ve net bir açıklama yap (maksimum 2 cümle).
+                Hemen uygulanabilecek tek bir kod satırı veya yöntem öner.
+                Laubali olma, sadece teknik gerçekleri söyle.
+
                 Hata: %s
                 Detay: %s
                 """.formatted(message, stackTrace);
 
         try {
             Map<String, Object> requestBody = Map.of(
-                "contents", List.of(
-                    Map.of("parts", List.of(
-                        Map.of("text", prompt)
-                    ))
-                )
-            );
+                    "contents", List.of(
+                            Map.of("parts", List.of(
+                                    Map.of("text", prompt)))));
 
             // GÜNCELLEME: Tekrar v1beta'ya döndük ve modeli 1.5-flash yaptık
             Map<String, Object> response = restClient.post()
                     .uri(uriBuilder -> uriBuilder
-                        .path("/v1beta/models/gemini-1.5-flash:generateContent")
-                        .queryParam("key", apiKey)
-                        .build())
+                            .path("/v1beta/models/gemini-2.5-flash:generateContent")
+                            .queryParam("key", apiKey)
+                            .build())
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(requestBody)
                     .retrieve()
@@ -64,10 +63,10 @@ public class GeminiAiAdapter implements AiAnalysisService {
                 Map<String, Object> content = (Map<String, Object>) firstCandidate.get("content");
                 List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
                 Map<String, Object> firstPart = parts.get(0);
-                
+
                 return (String) firstPart.get("text");
             }
-            
+
             return "AI cevabı beklenen formatta gelmedi.";
 
         } catch (Exception e) {
