@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.blosny.logscope.domain.model.ErrorLog;
 
-@Repository // Spring'e "Veritabanı işlerini bu arkadaş yapacak" diyoruz.
+@Repository
 public interface ErrorLogRepository extends JpaRepository<ErrorLog, Long> {
-    // JPA kendisi yazacak buraları
+
 }
